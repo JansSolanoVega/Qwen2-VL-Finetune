@@ -9,6 +9,7 @@ from torch.utils.data import Dataset
 from qwen_vl_utils import process_vision_info
 from PIL import Image
 import re
+from torch.utils.data import random_split
 
 from .params import DataArguments
 from .constants import *
@@ -343,8 +344,19 @@ def make_supervised_data_module(model_id, processor, data_args):
     sft_dataset = SupervisedDataset(
         data_path=data_args.data_path, processor=processor, data_args=data_args, model_id=model_id
     )
+
+    # Calculate sizes for train, val, and test
+    total_size = len(sft_dataset)
+    train_size = int(0.8 * total_size)
+    val_size = int(0.1 * total_size)
+    test_size = total_size - train_size - val_size
+
+    # Perform the split with a fixed seed for reproducibility
+    generator = torch.Generator().manual_seed(42)
+    train_dataset, val_dataset, _ = random_split(sft_dataset, [train_size, val_size, test_size], generator=generator)
+
     data_collator = DataCollatorForSupervisedDataset(pad_token_id=processor.tokenizer.pad_token_id)
 
-    return dict(train_dataset=sft_dataset,
+    return dict(train_dataset=train_dataset,
                 eval_dataset=None,
                 data_collator=data_collator)

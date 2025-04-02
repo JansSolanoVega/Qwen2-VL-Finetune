@@ -1,0 +1,9 @@
+[
+    {
+        "model_input": "Given this fMRI recording, what is the patient's age?\nRespond in JSON format: {\"age\": \"{age}\"}",
+        "response": "{\"age\": \"{age}\"}",
+        "response_vars": [
+            "age"
+        ]
+    }
+]

@@ -102,6 +102,7 @@ def train():
     compute_dtype = (torch.float16 if training_args.fp16 else (torch.bfloat16 if training_args.bf16 else torch.float32))
 
     bnb_model_from_pretrained_args = {}
+    print("training bit: ", training_args.bits)
     if training_args.bits in [4,8]:
         bnb_model_from_pretrained_args.update(dict(
             device_map={"":training_args.device},
