@@ -4,7 +4,7 @@
 #SBATCH --nodes 1
 #SBATCH --gpus 1
 #SBATCH --requeue
-#SBATCH --constraint="rtx5000|rtx3090|a5000"
+#SBATCH --constraint="rtx3090|a5000"
 #SBATCH --ntasks-per-node 1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=1-04:00:00
